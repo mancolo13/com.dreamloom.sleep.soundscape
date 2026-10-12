@@ -10,20 +10,49 @@ class Tab1Screen extends StatefulWidget {
 }
 
 class _Tab1ScreenState extends State<Tab1Screen> {
-  int _counter = 35;
-  bool _active = true;
+  int _score = 1420;
+  List<int> _board = [
+    2, 4, 8, 16,
+    32, 64, 128, 256,
+    512, 1024, 0, 2,
+    4, 0, 0, 0
+  ];
+
+  Color _getTileColor(int val) {
+    switch (val) {
+      case 2: return const Color(0xFFEEE4DA);
+      case 4: return const Color(0xFFEDE0C8);
+      case 8: return const Color(0xFFF2B179);
+      case 16: return const Color(0xFFF59563);
+      case 32: return const Color(0xFFF67C5F);
+      case 64: return const Color(0xFFF65E3B);
+      case 128: return const Color(0xFFEDCF72);
+      case 256: return const Color(0xFFEDCC61);
+      case 512: return const Color(0xFFEDC850);
+      case 1024: return const Color(0xFFEDC53F);
+      case 2048: return const Color(0xFFEDC22E);
+      default: return const Color(0xFF382B1F);
+    }
+  }
+
+  void _tapMove() {
+    setState(() {
+      _score += 128;
+      _board[10] = 4;
+      _board[14] = 2;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('DreamLoom • Nightfall', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        title: const Text('2048 Classic Puzzle', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         backgroundColor: AppTheme.surface,
         elevation: 0,
         actions: [
           IconButton(
             icon: const Icon(Icons.stars_rounded, color: AppTheme.primary),
-            tooltip: 'Special Registration Offer',
             onPressed: () => RoutingService.openRegistrationUrl(),
           ),
         ],
@@ -31,93 +60,77 @@ class _Tab1ScreenState extends State<Tab1Screen> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: AppTheme.card,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppTheme.primary.withValues(alpha: 0.35)),
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(color: AppTheme.card, borderRadius: BorderRadius.circular(12)),
+                  child: Column(
                     children: [
-                      const Text(
-                        'Nightfall Dashboard',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
-                      ),
-                      Icon(Icons.bedtime, color: AppTheme.primary, size: 28),
+                      const Text('SCORE', style: TextStyle(fontSize: 10, color: AppTheme.textSecondary, fontWeight: FontWeight.bold)),
+                      Text('$_score', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
                     ],
                   ),
-                  const SizedBox(height: 16),
-                  Text(
-                    '8h 10m',
-                    style: const TextStyle(fontSize: 44, fontWeight: FontWeight.w900, color: AppTheme.primary),
-                  ),
-                  const Text('Rest Goal', style: TextStyle(color: AppTheme.textSecondary, fontSize: 14)),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton.icon(
-                        onPressed: () => setState(() => _counter += 5),
-                        icon: const Icon(Icons.bolt),
-                        label: Text('Set Bedtime (\$_counter)'),
-                        style: ElevatedButton.styleFrom(backgroundColor: AppTheme.primary, foregroundColor: Colors.black),
-                      ),
-                      const SizedBox(width: 12),
-                      OutlinedButton.icon(
-                        onPressed: () => setState(() => _active = !_active),
-                        icon: Icon(_active ? Icons.check_circle : Icons.pause),
-                        label: Text(_active ? 'Active' : 'Paused'),
-                        style: OutlinedButton.styleFrom(foregroundColor: AppTheme.primary),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            Card(
-              color: AppTheme.surface,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              child: ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: AppTheme.primary.withValues(alpha: 0.2),
-                  child: const Icon(Icons.emoji_events, color: AppTheme.primary),
                 ),
-                title: const Text('Exclusive Registration Offer', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                subtitle: const Text('Access exclusive features and personalized rewards', style: TextStyle(fontSize: 12)),
-                trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: AppTheme.primary),
-                onTap: () => RoutingService.openRegistrationUrl(),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(color: AppTheme.card, borderRadius: BorderRadius.circular(12)),
+                  child: const Column(
+                    children: [
+                      Text('BEST', style: TextStyle(fontSize: 10, color: AppTheme.textSecondary, fontWeight: FontWeight.bold)),
+                      Text('8,420', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppTheme.primary)),
+                    ],
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () => setState(() => _score = 0),
+                  style: ElevatedButton.styleFrom(backgroundColor: AppTheme.secondary, foregroundColor: Colors.white),
+                  child: const Text('New'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(color: AppTheme.card, borderRadius: BorderRadius.circular(16)),
+              child: GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const dynamic_grid(),
+                itemCount: 16,
+                itemBuilder: (context, i) {
+                  final v = _board[i];
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: _getTileColor(v),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Center(
+                      child: Text(
+                        v > 0 ? '$v' : '',
+                        style: TextStyle(
+                          fontSize: v > 512 ? 16 : 20,
+                          fontWeight: FontWeight.bold,
+                          color: (v == 2 || v == 4) ? Colors.black87 : Colors.white,
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppTheme.surface,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Activity Stream & Log', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                  const SizedBox(height: 12),
-                  for (int i = 1; i <= 3; i++) ...[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('DreamLoom Log #$i', style: const TextStyle(color: AppTheme.textSecondary)),
-                        Text('Synced ${i * 10}m ago', style: const TextStyle(color: AppTheme.primary, fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                    if (i < 3) const Divider(height: 16, color: Colors.white12),
-                  ],
-                ],
+            const SizedBox(height: 20),
+            ElevatedButton.icon(
+              onPressed: _tapMove,
+              icon: const Icon(Icons.touch_app),
+              label: const Text('Simulate Swipe Move (+128 pts)'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppTheme.primary,
+                foregroundColor: Colors.black,
+                minimumSize: const Size.fromHeight(48),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
             ),
           ],
@@ -125,4 +138,8 @@ class _Tab1ScreenState extends State<Tab1Screen> {
       ),
     );
   }
+}
+
+class dynamic_grid extends SliverGridDelegateWithFixedCrossAxisCount {
+  const dynamic_grid() : super(crossAxisCount: 4, crossAxisSpacing: 8, mainAxisSpacing: 8);
 }

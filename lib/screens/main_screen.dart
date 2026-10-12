@@ -23,10 +23,26 @@ class _MainScreenState extends State<MainScreen> {
         selectedIndex: _idx,
         onDestinationSelected: (i) => setState(() => _idx = i),
         destinations: const [
-          NavigationDestination(icon: Icon(Icons.bedtime_outlined), selectedIcon: Icon(Icons.bedtime), label: 'Nightfall'),
-          NavigationDestination(icon: Icon(Icons.waves_outlined), selectedIcon: Icon(Icons.waves), label: 'Ambience'),
-          NavigationDestination(icon: Icon(Icons.nightlight_outlined), selectedIcon: Icon(Icons.nightlight_round), label: 'SleepScore'),
-          NavigationDestination(icon: Icon(Icons.alarm_outlined), selectedIcon: Icon(Icons.alarm), label: 'Alarm'),
+          NavigationDestination(
+            icon: Icon(Icons.grid_4x4_outlined),
+            selectedIcon: Icon(Icons.grid_4x4),
+            label: 'Play 2048',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.emoji_events_outlined),
+            selectedIcon: Icon(Icons.emoji_events),
+            label: 'Scores',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.palette_outlined),
+            selectedIcon: Icon(Icons.palette),
+            label: 'Skins',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.task_alt_outlined),
+            selectedIcon: Icon(Icons.task_alt),
+            label: 'Quests',
+          ),
         ],
       ),
     );
